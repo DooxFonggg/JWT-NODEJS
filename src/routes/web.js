@@ -1,10 +1,10 @@
 const express = require('express');
+const homeController = require('../controller/homeController');
 const router = express.Router();
 
 const initWebRoutes = (app) => {
-    router.get('/', (req, res) => {
-        return res.send('hello word');
-    })
+    router.get('/', homeController.handleHelloWord);
+    router.get('/user', homeController.handleHelloUser);
     return app.use('/', router);
 }
 
