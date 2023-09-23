@@ -1,10 +1,4 @@
-const mysql = require('mysql2');
-// create the connection to database
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'jwt-nodejs'
-});
+const userService = require('../sevices/userService');
 
 const handleHelloWord = (req, res) => {
     // hat code len phan view
@@ -18,17 +12,8 @@ const handleHelloUser = (req, res) => {
 const createUser = async (req, res) => {
     // with placeholder
     // with placeholder\
-    let { email, password, username } = req.body;
-    console.log('>> check username', username);
-    connection.query(
-        'INSERT INTO user (email,password, username) VALUES (?, ?, ?)', [username, email, password],
-        function (err, results) {
-            if (err) {
-                console.log('check err', err);
-            }
-            console.log(results);
-        }
-    );
+    let { username, email, password } = req.body;
+    userService.createUserService(username, email, password);
     return res.send('create new user');
 
 }
