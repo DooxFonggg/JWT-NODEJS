@@ -1,13 +1,16 @@
 const bcrypt = require('bcryptjs');
-const mysql = require('mysql2');
-// create the connection to database
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'jwt-nodejs'
-})
+// const connection = require('../config/dataBase');
+const mysql = require('mysql2/promise');
 
-const createUserService = (username, email, password) => {
+// create the connection to database
+
+
+const createUserService = async (username, email, password) => {
+    const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        database: 'jwt-nodejs'
+    })
     let salt = bcrypt.genSaltSync(10);
     let hashPass = bcrypt.hashSync(password, salt);
     // check pass word
@@ -25,4 +28,33 @@ const createUserService = (username, email, password) => {
     }
 }
 
-module.exports = { createUserService }
+const readAllUsers = async () => {
+    try {
+        const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            database: 'jwt-nodejs'
+        })
+        const [rows, fields] = await connection.execute('SELECT * FROM user');
+        return rows;
+    } catch (error) {
+        console.error('>> check err', error);
+        throw error; // Rethrow the error to be caught in the calling function
+    }
+}
+
+const deleteUser = async (id) => {
+    try {
+        const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            database: 'jwt-nodejs'
+        })
+        const [rows, fields] = await connection.execute('DELETE FROM user WHERE id=?', [id]);
+        return rows;
+    } catch (error) {
+        console.error('>> check err', error);
+        throw error; // Rethrow the error to be caught in the calling function
+    }
+}
+module.exports = { createUserService, readAllUsers, deleteUser }
