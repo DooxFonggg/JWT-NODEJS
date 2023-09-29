@@ -57,4 +57,33 @@ const deleteUser = async (id) => {
         throw error; // Rethrow the error to be caught in the calling function
     }
 }
-module.exports = { createUserService, readAllUsers, deleteUser }
+
+const getUpdateUserById = async (id) => {
+    try {
+        const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            database: 'jwt-nodejs'
+        })
+        const [rows, fields] = await connection.execute('SELECT * FROM user WHERE id=?', [id]);
+        return rows;
+    } catch (error) {
+        console.error('>> check err', error);
+        throw error; // Rethrow the error to be caught in the calling function
+    }
+}
+const updateUser = async (email, username, id) => {
+    try {
+        const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            database: 'jwt-nodejs'
+        })
+        const [rows, fields] = await connection.execute('UPDATE user SET email=?, username=? WHERE id=? ', [email, username, id]);
+        return rows;
+    } catch (error) {
+        console.error('>> check err', error);
+        throw error; // Rethrow the error to be caught in the calling function
+    }
+}
+module.exports = { createUserService, readAllUsers, deleteUser, getUpdateUserById, updateUser }

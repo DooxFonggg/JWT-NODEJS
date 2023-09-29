@@ -17,7 +17,6 @@ const createUser = async (req, res) => {
 
 const getAllUser = async (req, res) => {
     let results = await userService.readAllUsers();
-    console.log('check res', results);
     return res.render('user.ejs', { listUsers: results });
 }
 
@@ -27,4 +26,20 @@ const postDeleteUser = async (req, res) => {
     return res.redirect('/user');
 }
 
-module.exports = { handleHelloWord, createUser, getAllUser, postDeleteUser }
+const getUpdateUser = async (req, res) => {
+    let id = req.params.id;
+    let results = await userService.getUpdateUserById(id);
+    let userData = {};
+    if (results && results.length > 0) {
+        userData = results[0]; // check dieu kien loi
+    }
+    console.log('>> check userdata', userData)
+    return res.render('update-user.ejs', { userData });
+}
+
+const postUpdateUser = async (req, res) => {
+    let { id, email, username } = req.body;
+    await userService.updateUser(email, username, id);
+    return res.redirect('/user');
+}
+module.exports = { handleHelloWord, createUser, getAllUser, postDeleteUser, getUpdateUser, postUpdateUser }
