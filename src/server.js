@@ -4,6 +4,7 @@ const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const configViewEngine = require("./config/viewEngine");
 const initWebRoutes = require("./routes/web");
+const connection = require('./config/connetionDB');
 require('dotenv').config();
 
 const app = express();
@@ -20,6 +21,7 @@ initWebRoutes(app);
 
 const PORT = process.env.PORT || 8080;
 
+connection();
 
 app.listen(PORT, () => {
     console.log('jwt is running on the port:' + PORT);
